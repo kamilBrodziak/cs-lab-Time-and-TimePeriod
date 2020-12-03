@@ -39,6 +39,14 @@ namespace TimeLibrary {
         public bool Equals(Time other) => Hours == other.Hours &&
             Minutes == other.Minutes && Seconds == other.Seconds;
 
+        public override bool Equals(object obj) {
+            return obj is Time && Equals(obj);
+        }
+
+        public override int GetHashCode() {
+            return HashCode.Combine(Hours, Minutes, Seconds);
+        }
+
         public int CompareTo(Time other) {
             int compare = Hours.CompareTo(other.Hours);
             if(compare != 0) return compare;

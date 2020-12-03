@@ -46,6 +46,14 @@ namespace TimeLibrary {
             return Seconds == other.Seconds;
         }
 
+        public override bool Equals(object obj) {
+            return obj is TimePeriod && Equals(obj);
+        }
+
+        public override int GetHashCode() {
+            return Seconds.GetHashCode();
+        }
+
         public int CompareTo(TimePeriod other) {
             return Seconds.CompareTo(other.Seconds);
         }
@@ -68,6 +76,7 @@ namespace TimeLibrary {
             return new TimePeriod(seconds);
         }
         public TimePeriod Minus(TimePeriod other) => Minus(this, other);
+
         public static TimePeriod operator -(TimePeriod t1, TimePeriod t2) => Minus(t1, t2);
 
 
