@@ -8,14 +8,12 @@ namespace TimeLibrary {
     public struct TimePeriod : IEquatable<TimePeriod>, IComparable<TimePeriod> {
         public readonly long Seconds { get; }
 
-        public TimePeriod(long hours, byte minutes, byte seconds = 0) 
-            : this(hours * 60 * 60 + minutes * 60 + seconds) {
-
-            verifyRange(minutes, 0, 59);
-            verifyRange(seconds, 0, 59);
-            verifyRange(hours, 0, long.MaxValue);
-            bool verifyRange(long value, long min, long max) =>
-                (value >= min && value <= max) ? true : throw new ArgumentOutOfRangeException();
+        public TimePeriod(long hours, byte minutes, byte seconds = 0) {
+            Seconds = verifyRange(hours, 0, long.MaxValue) * 3600 
+                + verifyRange(minutes, 0, 59) * 60
+                + verifyRange(seconds, 0, 59);
+            long verifyRange(long value, long min, long max) =>
+                (value >= min && value <= max) ? value : throw new ArgumentOutOfRangeException();
         }
 
         public TimePeriod(long seconds) {
@@ -30,12 +28,12 @@ namespace TimeLibrary {
             // H+:MM or H+:M
             // H+:MM:SS or H+:M:SS or H+:MM:S or H+:M:S
             if(!Regex.IsMatch(time, @"^([1-9]?[0-9]+)(:[0-5]?[0-9]){0,2}$"))
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentException();
             string[] timePartsStrings = time.Split(":");
             byte[] timeParts = new byte[] { 0, 0 };
             long hour = long.Parse(timePartsStrings[0]);
             for(int i = 1; i < timePartsStrings.Length; ++i) {
-                timeParts[i] = byte.Parse(timePartsStrings[i]);
+                timeParts[i - 1] = byte.Parse(timePartsStrings[i]);
             }
             Seconds = hour * 60 * 60 + timeParts[0] * 60 + timeParts[1];
         }
