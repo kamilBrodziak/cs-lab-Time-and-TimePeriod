@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using TimeLibrary;
+using static TimeLibrary.TimePeriod;
 
 namespace TimeUnitTests {
     [TestClass]
@@ -21,9 +22,12 @@ namespace TimeUnitTests {
             TimePeriod t = new TimePeriod(a);
         }
 
-        public static IEnumerable<object[]> DataSet1InvalidString_ArgumentOutOfRangeEx => new List<object[]> {
+        public static IEnumerable<object[]> DataSet1InvalidString_ArgumentEx => new List<object[]> {
             new object[] {""},
             new object[] {"15.2.2"},
+            new object[] {"15:2.222"},
+            new object[] {"15.21"},
+            new object[] {"15:2:22.22222"},
             new object[] {"safas"},
             new object[] {"15:124"},
             new object[] {"-14:12:12"},
@@ -35,7 +39,7 @@ namespace TimeUnitTests {
             new object[] {"145:145"}
         };
         [DataTestMethod, TestCategory("Constructors")]
-        [DynamicData(nameof(DataSet1InvalidString_ArgumentOutOfRangeEx))]
+        [DynamicData(nameof(DataSet1InvalidString_ArgumentEx))]
         [ExpectedException(typeof(ArgumentException))]
         public void Constructor_Invalid_String_ArgumentException(string a) {
             TimePeriod t = new TimePeriod(a);
@@ -79,21 +83,34 @@ namespace TimeUnitTests {
         };
         [DataTestMethod, TestCategory("Constructors")]
         [DynamicData(nameof(DataSet1ValidString))]
-        public void Constructor_Valid_String_ArgumentException(string a, long expectedSeconds) {
+        public void Constructor_Valid_String(string a, long expectedSeconds) {
             Assert.AreEqual(expectedSeconds, (new TimePeriod(a)).Seconds);
         }
 
-        public static IEnumerable<object[]> DataSetValidSeconds => new List<object[]> {
-            new object[] {55555, 55555},
-            new object[] {156, 156},
+        public static IEnumerable<object[]> DataSetValidMiliseconds => new List<object[]> {
+            new object[] {55555000, 55555},
+            new object[] {156000, 156},
             new object[] {0, 0},
-            new object[] {1, 1}
+            new object[] {1000, 1}
         };
         [DataTestMethod, TestCategory("Constructors")]
-        [DynamicData(nameof(DataSetValidSeconds))]
-        public void Constructor_Valid_Seconds(long a, long expected) {
+        [DynamicData(nameof(DataSetValidMiliseconds))]
+        public void Constructor_Valid_Miliseconds(long a, long expected) {
             TimePeriod t = new TimePeriod(a);
 
+            Assert.AreEqual(expected, t.Seconds);
+        }
+
+        public static IEnumerable<object[]> DataSetValidSecondsTimeUnit => new List<object[]> {
+            new object[] {55555, TimeUnit.Second, 55555},
+            new object[] {156, TimeUnit.Hour, 156 * 3600},
+            new object[] {121, TimeUnit.Minute, 121 * 60},
+            new object[] {622, TimeUnit.Milisecond, 0}
+        };
+        [DataTestMethod, TestCategory("Constructors")]
+        [DynamicData(nameof(DataSetValidSecondsTimeUnit))]
+        public void Constructor_Valid_Seconds_TimeUnit(long a, TimeUnit timeUnit, long expected) {
+            TimePeriod t = new TimePeriod(a, timeUnit);
             Assert.AreEqual(expected, t.Seconds);
         }
 
@@ -250,7 +267,7 @@ namespace TimeUnitTests {
             TimePeriod t1 = new TimePeriod(a);
             TimePeriod t2 = new TimePeriod(b);
             TimePeriod result = t1 + t2;
-            Assert.AreEqual(expected, result.Seconds);
+            Assert.AreEqual(expected, result.Miliseconds);
         }
 
         public static IEnumerable<object[]> DataSetSubstract => new List<object[]> {
@@ -267,7 +284,7 @@ namespace TimeUnitTests {
             TimePeriod t1 = new TimePeriod(a);
             TimePeriod t2 = new TimePeriod(b);
             TimePeriod result = t1 - t2;
-            Assert.AreEqual(expected, result.Seconds);
+            Assert.AreEqual(expected, result.Miliseconds);
         }
 
         public static IEnumerable<object[]> DataSetSubstract_ArgumentException => new List<object[]> {

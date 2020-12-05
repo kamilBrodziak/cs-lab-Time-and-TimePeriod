@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30717.126
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp", "ConsoleApp\ConsoleApp.csproj", "{0A6FF4D1-14A2-4E1A-BB86-3934C1369134}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleApp", "ConsoleApp\ConsoleApp.csproj", "{0A6FF4D1-14A2-4E1A-BB86-3934C1369134}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeLibrary", "TimeLibrary\TimeLibrary.csproj", "{5084D4AE-C14C-4E03-8750-3750A374A1C1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimeLibrary", "TimeLibrary\TimeLibrary.csproj", "{5084D4AE-C14C-4E03-8750-3750A374A1C1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeUnitTests", "TimeUnitTests\TimeUnitTests.csproj", "{60E74A01-C326-453F-9E63-42507A7E3A9B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimeUnitTests", "TimeUnitTests\TimeUnitTests.csproj", "{60E74A01-C326-453F-9E63-42507A7E3A9B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
