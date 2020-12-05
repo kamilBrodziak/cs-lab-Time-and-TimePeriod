@@ -156,7 +156,7 @@ namespace TimeUnitTests {
         public void TimePeriod_Comparisons_Greater(long a, long b, bool expected) {
             TimePeriod t1 = new TimePeriod(a);
             TimePeriod t2 = new TimePeriod(b);
-            Assert.AreEqual(t1 > t2, expected);
+            Assert.AreEqual(expected, t1 > t2);
         }
 
         public static IEnumerable<object[]> DataSetComparisonGreaterEqual => new List<object[]> {
@@ -172,7 +172,7 @@ namespace TimeUnitTests {
         public void TimePeriod_Comparisons_Greater_Equal(long a, long b, bool expected) {
             TimePeriod t1 = new TimePeriod(a);
             TimePeriod t2 = new TimePeriod(b);
-            Assert.AreEqual(t1 >= t2, expected);
+            Assert.AreEqual(expected, t1 >= t2);
         }
 
         public static IEnumerable<object[]> DataSetComparisonLower => new List<object[]> {
@@ -187,7 +187,7 @@ namespace TimeUnitTests {
         public void TimePeriod_Comparisons_Lower(long a, long b, bool expected) {
             TimePeriod t1 = new TimePeriod(a);
             TimePeriod t2 = new TimePeriod(b);
-            Assert.AreEqual(t1 < t2, expected);
+            Assert.AreEqual(expected, t1 < t2);
         }
 
         public static IEnumerable<object[]> DataSetComparisonLowerEqual => new List<object[]> {
@@ -202,7 +202,7 @@ namespace TimeUnitTests {
         public void TimePeriod_Comparisons_Lower_Equal(long a, long b, bool expected) {
             TimePeriod t1 = new TimePeriod(a);
             TimePeriod t2 = new TimePeriod(b);
-            Assert.AreEqual(t1 <= t2, expected);
+            Assert.AreEqual(expected, t1 <= t2);
         }
 
         public static IEnumerable<object[]> DataSetComparisonEqual => new List<object[]> {
@@ -217,7 +217,7 @@ namespace TimeUnitTests {
         public void TimePeriod_Comparisons_Equal(long a, long b, bool expected) {
             TimePeriod t1 = new TimePeriod(a);
             TimePeriod t2 = new TimePeriod(b);
-            Assert.AreEqual(t1 == t2, expected);
+            Assert.AreEqual(expected, t1 == t2);
         }
 
         public static IEnumerable<object[]> DataSetComparisonNotEqual => new List<object[]> {
@@ -232,7 +232,7 @@ namespace TimeUnitTests {
         public void TimePeriod_Comparisons_Not_Equal(long a, long b, bool expected) {
             TimePeriod t1 = new TimePeriod(a);
             TimePeriod t2 = new TimePeriod(b);
-            Assert.AreEqual(t1 != t2, expected);
+            Assert.AreEqual(expected, t1 != t2);
         }
         #endregion
 

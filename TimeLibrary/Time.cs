@@ -23,7 +23,7 @@ namespace TimeLibrary {
             // HH:MM or H:M or HH:M or HH:MM
             // HH:MM:SS or H:MM:SS or HH:M:SS and so on..
             if(!Regex.IsMatch(time, @"^([0-1]?[0-9]|2[0-3])(:[0-5]?[0-9]){0,2}$")) 
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentException();
             string[] timePartsStrings = time.Split(":");
             byte[] timeParts = new byte[] { 0, 0, 0 };
             for(int i = 0; i < timePartsStrings.Length; ++i) {
@@ -87,7 +87,7 @@ namespace TimeLibrary {
         }
 
         public Time Minus(TimePeriod timePeriod) => Minus(this, timePeriod);
-        public static Time operator -(Time time, TimePeriod timePeriod) => Plus(time, timePeriod);
+        public static Time operator -(Time time, TimePeriod timePeriod) => Minus(time, timePeriod);
 
     }
 }
