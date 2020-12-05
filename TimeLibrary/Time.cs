@@ -3,12 +3,28 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 
 namespace TimeLibrary {
-    public struct Time : IEquatable<Time>, IComparable<Time> {
-        public readonly byte Hours { get; }
-        public readonly byte Minutes { get; }
-        public readonly byte Seconds { get; }
-        public readonly short MiliSeconds { get; }
 
+    /// <summary>
+    /// Time struct used for describing time.
+    /// </summary>
+    public struct Time : IEquatable<Time>, IComparable<Time> {
+
+        /// <value>Get hours </value>
+        public readonly byte Hours { get; }
+        /// <value>Get hours </value>
+        public readonly byte Minutes { get; }
+        /// <value>Get seconds </value>
+        public readonly byte Seconds { get; }
+        /// <value>Get miliseconds </value>
+        public readonly short MiliSeconds { get; }
+        /// <exception cref="System.ArgumentOutOfRangeException">Thrown when parameters are below 0 
+        /// or when first parameter is greater than 23
+        /// or when second or third paramterer is greater than 59 
+        /// or when fourth parameter is greater than 999.</exception>
+        /// <param name="hours">A byte number used as a time representation of hours. Must be lower than 23</param>
+        /// <param name="minutes">A byte number used as a time representation of minutes. Must be lower than 60</param>
+        /// <param name="seconds">A optional byte number used as a time representation of seconds. Must be lower than 60</param>
+        /// <param name="miliseconds">A optional short integer used as a time representation of miliseconds. Must be lower than 1000</param>
         public Time(byte hours, byte minutes = 0, byte seconds = 0, short miliseconds = 0) {
             Hours = (byte)verifyRange(hours, 0, 23);
             Minutes = (byte)verifyRange(minutes, 0, 59);
@@ -19,12 +35,17 @@ namespace TimeLibrary {
                 (value >= min && value <= max) ? value : throw new ArgumentOutOfRangeException();
         }
 
+        /// <exception cref="System.ArgumentException">
+        /// Thrown when first parameter doesn't match required format.
+        /// </exception>
+        /// <param name="time">A string used as a representation of time.
+        /// Matches:
+        /// 1. HH or H
+        /// 2. HH:MM or HH:M or H:MM or H:M
+        /// 3. HH:MM:SS or HH:M:SS or HH:MM:S or HH:M:S or H:MM:SS and so on
+        /// 4. 3 + .S or .SS or .SSS for miliseconds
+        /// </param>
         public Time(string time) {
-            // Matches:
-            // HH or H
-            // HH:MM or H:M or HH:M or HH:MM
-            // HH:MM:SS or H:MM:SS or HH:M:SS and so on..
-            // Ending with nothing .S or .SS or .SSS when miliseconds
             if(!Regex.IsMatch(time, @"^([0-1]?[0-9]|2[0-3])((:[0-5]?[0-9]){0,2}|:[0-5]?[0-9]{2}\.([1-9][0-9]{0,2}))$"))
                 throw new ArgumentException();
             string[] timePartsStrings = time.Split(":");
@@ -46,11 +67,25 @@ namespace TimeLibrary {
             MiliSeconds = miliseconds;
         }
 
+        /// <returns>
+        /// Returns string representation of time, in format HH:MM:SS
+        /// </returns>
         public override string ToString() => $"{Hours:D2}:{Minutes:D2}:{Seconds:D2}";
 
+        /// <param name="withMiliseconds">
+        /// A boolean parameter, true if you want to include miliseconds
+        /// </param>
+        /// <returns>
+        /// Returns string representation of time, in format HH:MM:SS or HH:MM:SS.SSS
+        /// </returns>
         public string ToString(bool withMiliseconds) => ToString() + (withMiliseconds ? $".{MiliSeconds:D3}" : "");
 
-
+        /// <summary>
+        /// Times are equal when their hour, minutes, seconds and miliseconds are equal.
+        /// </summary>
+        /// <returns>
+        /// A boolean, true if timeperiods are equal.
+        /// </returns>
         public bool Equals(Time other) => Hours == other.Hours &&
             Minutes == other.Minutes && Seconds == other.Seconds && MiliSeconds == other.MiliSeconds;
 
@@ -82,6 +117,20 @@ namespace TimeLibrary {
         public static bool operator <=(Time t1, Time t2) => t1.CompareTo(t2) <= 0;
         public static bool operator >=(Time t1, Time t2) => t1.CompareTo(t2) >= 0;
 
+
+        /// <summary>
+        /// Adding two times t1, t2 by creating new Time with sum of t1, t2 times.
+        /// Skip day/days when time period is long enough
+        /// </summary>
+        /// <param name="time">
+        /// Time object
+        /// </param>
+        /// <param name="timePeriod">
+        /// TimePeriod object
+        /// </param>
+        /// <returns>
+        /// Time object
+        /// </returns>
         public static Time Plus(Time time, TimePeriod timePeriod) {
             long timeMiliseconds = time.Hours * 3600000 + time.Minutes * 60000 + time.Seconds * 1000 + time.MiliSeconds;
             timeMiliseconds += timePeriod.Miliseconds;
@@ -95,10 +144,23 @@ namespace TimeLibrary {
         public Time Plus(TimePeriod timePeriod) => Plus(this, timePeriod);
         public static Time operator +(Time time, TimePeriod timePeriod) => Plus(time, timePeriod);
 
+
+        /// <summary>
+        /// Substracting t1 and TimePeriod t2 by creating new Time with time of t1 substracted by t2 miliseconds count.
+        /// Goes back in time couple of days if TimePeriod is long enough
+        /// </summary>
+        /// <param name="time">
+        /// Time object
+        /// </param>
+        /// <param name="timePeriod">
+        /// TimePeriod object
+        /// </param>
+        /// <returns>
+        /// Time object
+        /// </returns>
         public static Time Minus(Time time, TimePeriod timePeriod) {
             long timeMiliseconds = time.Hours * 3600000 + time.Minutes * 60000 + time.Seconds * 1000 + time.MiliSeconds;
             timeMiliseconds -= timePeriod.Miliseconds;
-            // If timeSeconds < 0 then get time from day in the past
             while(timeMiliseconds < 0)
                 timeMiliseconds += 24 * 3600000;
             byte hours = (byte)((timeMiliseconds / 3600000) % 24);
