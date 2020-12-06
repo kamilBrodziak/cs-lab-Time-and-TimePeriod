@@ -46,7 +46,7 @@ namespace TimeLibrary {
         /// 4. 3 + .S or .SS or .SSS for miliseconds
         /// </param>
         public Time(string time) {
-            if(!Regex.IsMatch(time, @"^([0-1]?[0-9]|2[0-3])((:[0-5]?[0-9]){0,2}|:[0-5]?[0-9]{2}\.([1-9][0-9]{0,2}))$"))
+            if(!Regex.IsMatch(time, @"^([0-1]?[0-9]|2[0-3])((:[0-5]?[0-9]){0,2}|(:[0-5]?[0-9]){2}\.[1-9][0-9]{0,2})$"))
                 throw new ArgumentException();
             string[] timePartsStrings = time.Split(":");
             byte[] timeParts = new byte[] { 0, 0, 0 };
@@ -54,7 +54,7 @@ namespace TimeLibrary {
             for(int i = 0; i < timePartsStrings.Length && i < 2; ++i) {
                 timeParts[i] = byte.Parse(timePartsStrings[i]);
             }
-            if(timePartsStrings.Length == 2) {
+            if(timePartsStrings.Length == 3) {
                 string[] secondPartsStrings = timePartsStrings[2].Split(".");
                 timeParts[2] = byte.Parse(secondPartsStrings[0]);
                 if(secondPartsStrings.Length == 2) {

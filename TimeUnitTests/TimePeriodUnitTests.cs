@@ -88,17 +88,17 @@ namespace TimeUnitTests {
         }
 
         public static IEnumerable<object[]> DataSetValidMiliseconds => new List<object[]> {
-            new object[] {55555000, 55555},
-            new object[] {156000, 156},
+            new object[] {55555, 55555},
+            new object[] {156, 156},
             new object[] {0, 0},
-            new object[] {1000, 1}
+            new object[] {1, 1}
         };
         [DataTestMethod, TestCategory("Constructors")]
         [DynamicData(nameof(DataSetValidMiliseconds))]
         public void Constructor_Valid_Miliseconds(long a, long expected) {
             TimePeriod t = new TimePeriod(a);
 
-            Assert.AreEqual(expected, t.Seconds);
+            Assert.AreEqual(expected, t.Miliseconds);
         }
 
         public static IEnumerable<object[]> DataSetValidSecondsTimeUnit => new List<object[]> {
@@ -155,7 +155,7 @@ namespace TimeUnitTests {
         [DataTestMethod, TestCategory("String representation")]
         [DynamicData(nameof(DataSetToString))]
         public void ToString_Valid_Format(long a, string expected) {
-            TimePeriod t = new TimePeriod(a);
+            TimePeriod t = new TimePeriod(a, TimeUnit.Second);
             Assert.AreEqual(expected, t.ToString());
         }
         #endregion

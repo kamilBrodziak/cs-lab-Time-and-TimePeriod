@@ -43,6 +43,8 @@ namespace TimeUnitTests {
             new object[] {"1:59:123"},
             new object[] {"12:-1:-5"},
             new object[] {"12:12:12:12"},
+            new object[] {"12:12:12."},
+            new object[] {"12:12:12.2122"},
         };
         [DataTestMethod, TestCategory("Constructors")]
         [DynamicData(nameof(DataSet1InvalidString_ArgumentOutOfRangeEx))]
@@ -59,7 +61,9 @@ namespace TimeUnitTests {
             new object[] {"23:14:03", (byte)23, (byte)14, (byte)3 },
             new object[] {"1:1:1", (byte)1, (byte)1, (byte)1 },
             new object[] {"23:4:15", (byte)23, (byte)4, (byte)15 },
-            new object[] {"14:15:1", (byte)14, (byte)15, (byte)1 }
+            new object[] {"14:15:1", (byte)14, (byte)15, (byte)1 },
+            new object[] {"14:15:1.2", (byte)14, (byte)15, (byte)1 },
+            new object[] {"14:15:1.267", (byte)14, (byte)15, (byte)1 }
         };
         [DataTestMethod, TestCategory("Constructors")]
         [DynamicData(nameof(DataSet1ValidString))]
@@ -250,9 +254,9 @@ namespace TimeUnitTests {
         };
         [DataTestMethod, TestCategory("Add, substract")]
         [DynamicData(nameof(DataSetAdd))]
-        public void Time_Add(string a, long b, string expected) {
+        public void Add(string a, long b, string expected) {
             Time t1 = new Time(a);
-            TimePeriod t2 = new TimePeriod(b);
+            TimePeriod t2 = new TimePeriod(b, TimePeriod.TimeUnit.Second);
             Time result = t1 + t2;
             Assert.AreEqual(expected, result.ToString());
         }
@@ -266,7 +270,7 @@ namespace TimeUnitTests {
         [DynamicData(nameof(DataSetSubstract))]
         public void Substract(string a, long b, string expected) {
             Time t1 = new Time(a);
-            TimePeriod t2 = new TimePeriod(b);
+            TimePeriod t2 = new TimePeriod(b, TimePeriod.TimeUnit.Second);
             Time result = t1 - t2;
             Assert.AreEqual(expected, result.ToString());
         }

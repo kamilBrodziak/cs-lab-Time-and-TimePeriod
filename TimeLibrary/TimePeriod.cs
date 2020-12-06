@@ -80,10 +80,9 @@ namespace TimeLibrary {
             if(!Regex.IsMatch(time, @"^([1-9]?[0-9]+)((:[0-5]?[0-9]){0,2}|((:[0-5]?[0-9]){2}\.([0]{0,3}|[1-9][0-9]{0,2})))$"))
                 throw new ArgumentException();
             string[] timePartsStrings = time.Split(":");
-            long hour = 0;
             byte minute = 0, second = 0;
             short miliseconds = 0;
-            hour = long.Parse(timePartsStrings[0]);
+            long hour = long.Parse(timePartsStrings[0]);
             if(timePartsStrings.Length > 1) {
                 minute = byte.Parse(timePartsStrings[1]);
                 if(timePartsStrings.Length == 3) {
@@ -101,7 +100,7 @@ namespace TimeLibrary {
         /// <returns>
         /// Returns string representation of time period, in format H:MM:SS
         /// </returns>
-        public override string ToString() => $"{Miliseconds / 3600000}:{(Miliseconds / 60000) % 60:D2}:{(Miliseconds / 1000) % 60:D2}";
+        public override string ToString() => $"{Seconds / 3600}:{(Seconds / 60) % 60:D2}:{Seconds % 60:D2}";
 
         /// <param name="withMiliseconds">
         /// A boolean parameter, true if you want to include miliseconds
